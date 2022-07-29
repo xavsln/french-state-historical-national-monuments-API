@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the French State Historical Monuments API!");
 });
 
-// Returns a list of all Monuments
+// READ - Returns a list of all Monuments
 app.get("/monuments", (req, res) => {
   // res.send("This should render the list of all monuments available in the API");
   Monuments.find()
@@ -35,9 +35,21 @@ app.get("/monuments", (req, res) => {
     });
 });
 
-// Returns data in JSON format of specific Monument
-app.get("/monuments/:monumentName", (req, res) => {
-  res.send("This should render data of a specific monument");
+// READ - Returns data in JSON format of specific Monument
+app.get("/monuments/:monumentId", (req, res) => {
+  // res.send("This should render data of a specific monument");
+  Monuments.findOne({ _id: req.params.monumentId })
+    .then(monument => {
+      if (monument) {
+        res.status(200).json(monument);
+      } else {
+        res.status(400).send("No such a monument in the database.");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
 });
 
 app.listen(port, () => {
