@@ -1,0 +1,18 @@
+{
+  "name": "french-state-historical-national-monuments-api",
+  "version": "1.0.0",
+  "description": "An API that provides access to the list of French State Historical National Monuments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "xavsln",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "mongoose": "^6.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
