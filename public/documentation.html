@@ -73,6 +73,27 @@
         </td>
       </tr>
       <tr>
+        <td>
+          Return data (id, name, wikipedia link, type, latitude, longitude, city
+          location, department location, region location, remarks) about all
+          monuments located in a given city to the user
+        </td>
+        <td>/monuments/locations/<b>[cityLocation]</b></td>
+        <td>GET</td>
+        <td>None</td>
+        <td>
+          A JSON object holding data about all the monument, containing an ID,
+          name, wikipedia link, type, latitude, longitude, city location,
+          department location, region location, remarks about all monuments
+          located in a given city. Example: { "id": "1", "name": "Amiens
+          Cathedral, towers", "wikipediaLinkEn":
+          "https://en.wikipedia.org/wiki/Amiens_Cathedral", "type": "Cathedral",
+          "latitude": "46.141736", "longitude": "0.404965", "cityLocation":
+          "Amiens", "departmentLocation": "Somme", "regionLocation": "Picardy",
+          "remarks": null }
+        </td>
+      </tr>
+      <tr>
         <td>Return a list of all registered users to the admin</td>
         <td>/users</td>
         <td>GET</td>
