@@ -52,12 +52,28 @@ app.get('/monuments/:monumentId', (req, res) => {
     });
 });
 
+// READ - Returns data in JSON format all Monuments corresponding to a specific Type
+app.get('/monuments/types/:monumentType', (req, res) => {
+  // res.send("This should render data of a specific monument");
+  Monuments.find({ type: req.params.monumentType })
+    .then(monumentsWithType => {
+      if (monumentsWithType) {
+        res.status(200).json(monumentsWithType);
+      } else {
+        res.status(400).send('No such a monument in the database.');
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
 // READ - Returns data in JSON format of all monuments located in a given city
-app.get('/monuments/locations/:cityLocation', (req, res) => {
-  // res.send("This should render the list of all monuments available in the API");
-  Monuments.find({ CityLocation: req.params.cityLocation })
+app.get('/monuments/locations/:cityName', (req, res) => {
+  Monuments.find({ cityLocation: req.params.cityName })
     .then(monuments => {
-      console.log(req.params.cityLocation);
+      // console.log(req.params.cityName);
       console.log(monuments);
       res.status(201).json(monuments);
     })
