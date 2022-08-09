@@ -130,10 +130,6 @@ app.get('/users', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
-
 // READ - Return data about a User by name
 app.get(
   '/users/:username',
@@ -207,3 +203,30 @@ app.post(
       });
   }
 );
+
+// ADD a Monument to the user list of favorite Monuments
+app.post(
+  '/users/:userId/monuments/:monumentId',
+  // passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Users.findOneAndUpdate(
+      { _id: req.params.userId },
+      {
+        $addToSet: { favoriteMonuments: req.params.monumentId }
+      },
+      { new: true }, // This line makes sure that the updated document is returned
+      (err, updatedUser) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send('Error: ' + err);
+        } else {
+          res.json(updatedUser);
+        }
+      }
+    );
+  }
+);
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
