@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
@@ -6,11 +7,17 @@ const mongoose = require('mongoose');
 const Models = require('./models.js');
 
 const Monuments = Models.Monument;
+const Users = Models.User;
+
+const { check, validationResult } = require('express-validator');
 
 mongoose.connect('mongodb://localhost:27017/frenchStateHistoricalMonumentsDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+
+// Setup body-parser
+app.use(bodyParser.json());
 
 // ========================
 // GET routes
@@ -101,9 +108,21 @@ app.get('/monuments/locations/departments/:departmentName', (req, res) => {
 app.get('/monuments/locations/regions/:regionName', (req, res) => {
   Monuments.find({ regionLocation: req.params.regionName })
     .then(monuments => {
-      // console.log(req.params.cityName);
       console.log(monuments);
       res.status(201).json(monuments);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+// READ - Returns data in JSON format of all Users
+app.get('/users', (req, res) => {
+  Users.find()
+    .then(users => {
+      console.log(users);
+      res.status(201).json(users);
     })
     .catch(err => {
       console.error(err);
@@ -114,3 +133,77 @@ app.get('/monuments/locations/regions/:regionName', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+// READ - Return data about a User by name
+app.get(
+  '/users/:username',
+  // passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Users.findOne({ username: req.params.username })
+      .then(user => {
+        res.json(user);
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
+
+// =============
+// POST requests
+// =============
+
+// CREATE - Allow new User to register (Add a new user to the usersList)
+app.post(
+  '/users',
+  [
+    check(
+      'Username',
+      'Username with a minimum of 5 characters is required'
+    ).isLength({ min: 5 }),
+    check(
+      'Username',
+      'Username contains non alphanumeric characters - not allowed.'
+    ).isAlphanumeric(),
+    check('Password', 'Password is required')
+      .not()
+      .isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+  ],
+  (req, res) => {
+    // check the validation object for errors
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    // let hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOne({ username: req.body.Username })
+      .then(user => {
+        if (user) {
+          return res.status(400).send(req.body.Username + ' already exists');
+        } else {
+          Users.create({
+            username: req.body.Username,
+            // Password: hashedPassword,
+            password: req.body.Password,
+            email: req.body.Email,
+            birthday: req.body.Birthday,
+            role: req.body.Role
+          })
+            .then(user => {
+              res.status(201).json(user);
+            })
+            .catch(error => {
+              console.error(error);
+              res.status(500).send('Error: ' + error);
+            });
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      });
+  }
+);
