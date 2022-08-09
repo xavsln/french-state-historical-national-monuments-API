@@ -227,6 +227,53 @@ app.post(
   }
 );
 
+// =============
+// DELETE requests
+// =============
+
+// DELETE a Monument from the user list of favorite Monuments
+app.delete(
+  '/users/:userId/monuments/:monumentId',
+  // passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Users.findOneAndUpdate(
+      { _id: req.params.userId },
+      {
+        $pull: { favoriteMonuments: req.params.monumentId }
+      },
+      { new: true }, // This line makes sure that the updated document is returned
+      (err, updatedUser) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send('Error: ' + err);
+        } else {
+          res.json(updatedUser);
+        }
+      }
+    );
+  }
+);
+
+// DELETE a User from the user list
+app.delete(
+  '/users/:userId',
+  // passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Users.findOneAndRemove({ _id: req.params.userId })
+      .then(user => {
+        if (!user) {
+          res.status(400).send(req.params.userId + ' was not found');
+        } else {
+          res.status(200).send(req.params.userId + ' was deleted.');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
