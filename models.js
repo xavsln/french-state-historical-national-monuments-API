@@ -13,14 +13,16 @@ let monumentSchema = mongoose.Schema({
   remarks: String
 });
 
-// let userSchema = mongoose.Schema({
-//   Username: { type: String, required: true },
-//   Password: { type: String, required: true },
-//   Email: { type: String, required: true },
-//   Birthday: Date,
-//   favoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }],
-//   Role: { type: String, enum: ["user", "admin"], default: "user" }
-// });
+let userSchema = mongoose.Schema({
+  username: { type: String, required: true },
+  password: { type: String, required: true },
+  email: { type: String, required: true },
+  birthday: Date,
+  favoriteMonuments: [
+    { type: mongoose.Schema.Types.ObjectId, ref: 'Monument' }
+  ],
+  role: { type: String, enum: ['user', 'admin'], default: 'user' }
+});
 
 // userSchema.statics.hashPassword = password => {
 //   return bcrypt.hashSync(password, 10);
@@ -31,7 +33,7 @@ let monumentSchema = mongoose.Schema({
 // };
 
 let Monument = mongoose.model('Monument', monumentSchema);
-// let User = mongoose.model("User", userSchema);
+let User = mongoose.model('User', userSchema);
 
 module.exports.Monument = Monument;
-// module.exports.User = User;
+module.exports.User = User;
