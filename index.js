@@ -70,8 +70,36 @@ app.get('/monuments/types/:monumentType', (req, res) => {
 });
 
 // READ - Returns data in JSON format of all monuments located in a given city
-app.get('/monuments/locations/:cityName', (req, res) => {
+app.get('/monuments/locations/cities/:cityName', (req, res) => {
   Monuments.find({ cityLocation: req.params.cityName })
+    .then(monuments => {
+      // console.log(req.params.cityName);
+      console.log(monuments);
+      res.status(201).json(monuments);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+// READ - Returns data in JSON format of all monuments located in a given department
+app.get('/monuments/locations/departments/:departmentName', (req, res) => {
+  Monuments.find({ departmentLocation: req.params.departmentName })
+    .then(monuments => {
+      // console.log(req.params.cityName);
+      console.log(monuments);
+      res.status(201).json(monuments);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+// READ - Returns data in JSON format of all monuments located in a given department
+app.get('/monuments/locations/regions/:regionName', (req, res) => {
+  Monuments.find({ regionLocation: req.params.regionName })
     .then(monuments => {
       // console.log(req.params.cityName);
       console.log(monuments);
