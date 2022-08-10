@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jwt_decode = require('jwt-decode');
 const app = express();
-const port = 3000;
+
+const port = process.env.PORT || 3000;
 
 const mongoose = require('mongoose');
 const Models = require('./models.js');
@@ -12,7 +13,12 @@ const Users = Models.User;
 
 const { check, validationResult } = require('express-validator');
 
-mongoose.connect('mongodb://localhost:27017/frenchStateHistoricalMonumentsDB', {
+// mongoose.connect('mongodb://localhost:27017/frenchStateHistoricalMonumentsDB', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// });
+
+mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -386,6 +392,6 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log('Listening on Port ' + port);
 });
