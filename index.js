@@ -17,6 +17,9 @@ mongoose.connect('mongodb://localhost:27017/frenchStateHistoricalMonumentsDB', {
   useUnifiedTopology: true
 });
 
+const cors = require('cors');
+app.use(cors());
+
 let auth = require('./auth')(app);
 
 const passport = require('passport');
