@@ -107,7 +107,7 @@ app.get(
   (req, res) => {
     Monuments.find({ cityLocation: req.params.cityName })
       .then(monuments => {
-        console.log(monuments);
+        // console.log(monuments);
         res.status(201).json(monuments);
       })
       .catch(err => {
