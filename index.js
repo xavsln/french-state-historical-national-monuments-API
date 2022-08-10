@@ -174,7 +174,7 @@ app.post(
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-    // let hashedPassword = Users.hashPassword(req.body.Password);
+    let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOne({ username: req.body.Username })
       .then(user => {
         if (user) {
@@ -182,8 +182,8 @@ app.post(
         } else {
           Users.create({
             username: req.body.Username,
-            // Password: hashedPassword,
-            password: req.body.Password,
+            password: hashedPassword,
+            // password: req.body.Password,
             email: req.body.Email,
             birthday: req.body.Birthday,
             role: req.body.Role

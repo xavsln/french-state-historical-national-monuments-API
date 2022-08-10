@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 let monumentSchema = mongoose.Schema({
   name: { type: String, required: true },
@@ -24,13 +24,13 @@ let userSchema = mongoose.Schema({
   role: { type: String, enum: ['user', 'admin'], default: 'user' }
 });
 
-// userSchema.statics.hashPassword = password => {
-//   return bcrypt.hashSync(password, 10);
-// };
+userSchema.statics.hashPassword = password => {
+  return bcrypt.hashSync(password, 10);
+};
 
-// userSchema.methods.validatePassword = function(password) {
-//   return bcrypt.compareSync(password, this.Password);
-// };
+userSchema.methods.validatePassword = function(password) {
+  return bcrypt.compareSync(password, this.Password);
+};
 
 let Monument = mongoose.model('Monument', monumentSchema);
 let User = mongoose.model('User', userSchema);
