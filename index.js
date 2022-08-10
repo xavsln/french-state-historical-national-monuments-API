@@ -40,7 +40,6 @@ app.get(
   '/monuments',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    // res.send("This should render the list of all monuments available in the API");
     Monuments.find()
       .then(monuments => {
         res.status(201).json(monuments);
@@ -57,7 +56,6 @@ app.get(
   '/monuments/:monumentId',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    // res.send("This should render data of a specific monument");
     Monuments.findOne({ _id: req.params.monumentId })
       .then(monument => {
         if (monument) {
@@ -78,7 +76,6 @@ app.get(
   '/monuments/types/:monumentType',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    // res.send("This should render data of a specific monument");
     Monuments.find({ type: req.params.monumentType })
       .then(monumentsWithType => {
         if (monumentsWithType) {
@@ -101,7 +98,6 @@ app.get(
   (req, res) => {
     Monuments.find({ cityLocation: req.params.cityName })
       .then(monuments => {
-        // console.log(req.params.cityName);
         console.log(monuments);
         res.status(201).json(monuments);
       })
@@ -119,8 +115,7 @@ app.get(
   (req, res) => {
     Monuments.find({ departmentLocation: req.params.departmentName })
       .then(monuments => {
-        // console.log(req.params.cityName);
-        console.log(monuments);
+        // console.log(monuments);
         res.status(201).json(monuments);
       })
       .catch(err => {
@@ -137,7 +132,7 @@ app.get(
   (req, res) => {
     Monuments.find({ regionLocation: req.params.regionName })
       .then(monuments => {
-        console.log(monuments);
+        // console.log(monuments);
         res.status(201).json(monuments);
       })
       .catch(err => {
