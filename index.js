@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const jwt_decode = require('jwt-decode');
 const app = express();
 const port = 3000;
 
@@ -16,6 +17,11 @@ mongoose.connect('mongodb://localhost:27017/frenchStateHistoricalMonumentsDB', {
   useUnifiedTopology: true
 });
 
+let auth = require('./auth')(app);
+
+const passport = require('passport');
+require('./passport');
+
 // Setup body-parser
 app.use(bodyParser.json());
 
@@ -30,110 +36,160 @@ app.get('/', (req, res) => {
 });
 
 // READ - Returns a list of all Monuments
-app.get('/monuments', (req, res) => {
-  // res.send("This should render the list of all monuments available in the API");
-  Monuments.find()
-    .then(monuments => {
-      res.status(201).json(monuments);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/monuments',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    // res.send("This should render the list of all monuments available in the API");
+    Monuments.find()
+      .then(monuments => {
+        res.status(201).json(monuments);
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // READ - Returns data in JSON format of specific Monument by monumentId
-app.get('/monuments/:monumentId', (req, res) => {
-  // res.send("This should render data of a specific monument");
-  Monuments.findOne({ _id: req.params.monumentId })
-    .then(monument => {
-      if (monument) {
-        res.status(200).json(monument);
-      } else {
-        res.status(400).send('No such a monument in the database.');
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/monuments/:monumentId',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    // res.send("This should render data of a specific monument");
+    Monuments.findOne({ _id: req.params.monumentId })
+      .then(monument => {
+        if (monument) {
+          res.status(200).json(monument);
+        } else {
+          res.status(400).send('No such a monument in the database.');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // READ - Returns data in JSON format all Monuments corresponding to a specific Type
-app.get('/monuments/types/:monumentType', (req, res) => {
-  // res.send("This should render data of a specific monument");
-  Monuments.find({ type: req.params.monumentType })
-    .then(monumentsWithType => {
-      if (monumentsWithType) {
-        res.status(200).json(monumentsWithType);
-      } else {
-        res.status(400).send('No such a monument in the database.');
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/monuments/types/:monumentType',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    // res.send("This should render data of a specific monument");
+    Monuments.find({ type: req.params.monumentType })
+      .then(monumentsWithType => {
+        if (monumentsWithType) {
+          res.status(200).json(monumentsWithType);
+        } else {
+          res.status(400).send('No such a monument in the database.');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // READ - Returns data in JSON format of all monuments located in a given city
-app.get('/monuments/locations/cities/:cityName', (req, res) => {
-  Monuments.find({ cityLocation: req.params.cityName })
-    .then(monuments => {
-      // console.log(req.params.cityName);
-      console.log(monuments);
-      res.status(201).json(monuments);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/monuments/locations/cities/:cityName',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Monuments.find({ cityLocation: req.params.cityName })
+      .then(monuments => {
+        // console.log(req.params.cityName);
+        console.log(monuments);
+        res.status(201).json(monuments);
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // READ - Returns data in JSON format of all monuments located in a given department
-app.get('/monuments/locations/departments/:departmentName', (req, res) => {
-  Monuments.find({ departmentLocation: req.params.departmentName })
-    .then(monuments => {
-      // console.log(req.params.cityName);
-      console.log(monuments);
-      res.status(201).json(monuments);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/monuments/locations/departments/:departmentName',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Monuments.find({ departmentLocation: req.params.departmentName })
+      .then(monuments => {
+        // console.log(req.params.cityName);
+        console.log(monuments);
+        res.status(201).json(monuments);
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // READ - Returns data in JSON format of all monuments located in a given department
-app.get('/monuments/locations/regions/:regionName', (req, res) => {
-  Monuments.find({ regionLocation: req.params.regionName })
-    .then(monuments => {
-      console.log(monuments);
-      res.status(201).json(monuments);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/monuments/locations/regions/:regionName',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Monuments.find({ regionLocation: req.params.regionName })
+      .then(monuments => {
+        console.log(monuments);
+        res.status(201).json(monuments);
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // READ - Returns data in JSON format of all Users
-app.get('/users', (req, res) => {
-  Users.find()
-    .then(users => {
-      console.log(users);
-      res.status(201).json(users);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});
+app.get(
+  '/users',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    let token = req.headers.authorization;
+    let decodedToken = jwt_decode(token);
+
+    if (decodedToken.role == 'admin') {
+      Users.find()
+        .then(users => {
+          if (!users) {
+            res.status(400).send('No User in the database.');
+          } else {
+            res.status(200).json(users);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          res.status(500).send('Error: ' + err);
+        });
+    } else {
+      res.status(401).send('Not authorized.');
+    }
+    Users.find()
+      .then(users => {
+        if (!users) {
+          res.status(404).send('No User in the database.');
+        } else {
+          res.status(200).json(users);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+  }
+);
 
 // READ - Return data about a User by name
 app.get(
   '/users/:username',
-  // passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Users.findOne({ username: req.params.username })
       .then(user => {
@@ -207,7 +263,7 @@ app.post(
 // ADD a Monument to the user list of favorite Monuments
 app.post(
   '/users/:userId/monuments/:monumentId',
-  // passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Users.findOneAndUpdate(
       { _id: req.params.userId },
@@ -234,7 +290,7 @@ app.post(
 // DELETE a Monument from the user list of favorite Monuments
 app.delete(
   '/users/:userId/monuments/:monumentId',
-  // passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Users.findOneAndUpdate(
       { _id: req.params.userId },
@@ -257,7 +313,7 @@ app.delete(
 // DELETE a User from the user list
 app.delete(
   '/users/:userId',
-  // passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Users.findOneAndRemove({ _id: req.params.userId })
       .then(user => {
@@ -281,7 +337,7 @@ app.delete(
 // UPDATE - Allow an existing User to update its details (Update User name in the usersList)
 app.put(
   '/users/:userId',
-  // passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   [
     check(
       'Username',
