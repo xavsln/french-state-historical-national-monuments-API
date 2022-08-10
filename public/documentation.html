@@ -17,6 +17,7 @@
         <b>single monument</b> by monumentID to the user
       </li>
       <li>Allow <b>new users to register</b></li>
+      <li>Allow <b>existing users to login</b></li>
       <li>
         Allow <b>users to update</b> their user info (username, password, email,
         date of birth)
@@ -78,7 +79,49 @@
           location, department location, region location, remarks) about all
           monuments located in a given city to the user
         </td>
-        <td>/monuments/locations/<b>[cityLocation]</b></td>
+        <td>/monuments/locations/<b>[cityName]</b></td>
+        <td>GET</td>
+        <td>None</td>
+        <td>
+          A JSON object holding data about all the monument, containing an ID,
+          name, wikipedia link, type, latitude, longitude, city location,
+          department location, region location, remarks about all monuments
+          located in a given city. Example: { "id": "1", "name": "Amiens
+          Cathedral, towers", "wikipediaLinkEn":
+          "https://en.wikipedia.org/wiki/Amiens_Cathedral", "type": "Cathedral",
+          "latitude": "46.141736", "longitude": "0.404965", "cityLocation":
+          "Amiens", "departmentLocation": "Somme", "regionLocation": "Picardy",
+          "remarks": null }
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Return data (id, name, wikipedia link, type, latitude, longitude, city
+          location, department location, region location, remarks) about all
+          monuments located in a given department to the user
+        </td>
+        <td>/monuments/locations/<b>[departmentName]</b></td>
+        <td>GET</td>
+        <td>None</td>
+        <td>
+          A JSON object holding data about all the monument, containing an ID,
+          name, wikipedia link, type, latitude, longitude, city location,
+          department location, region location, remarks about all monuments
+          located in a given city. Example: { "id": "1", "name": "Amiens
+          Cathedral, towers", "wikipediaLinkEn":
+          "https://en.wikipedia.org/wiki/Amiens_Cathedral", "type": "Cathedral",
+          "latitude": "46.141736", "longitude": "0.404965", "cityLocation":
+          "Amiens", "departmentLocation": "Somme", "regionLocation": "Picardy",
+          "remarks": null }
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Return data (id, name, wikipedia link, type, latitude, longitude, city
+          location, department location, region location, remarks) about all
+          monuments located in a given region to the user
+        </td>
+        <td>/monuments/locations/<b>[regionName]</b></td>
         <td>GET</td>
         <td>None</td>
         <td>
@@ -102,7 +145,7 @@
       </tr>
       <tr>
         <td>Return data about a single registered user to the user</td>
-        <td>/users/<b>[username]</b></td>
+        <td>/users/<b>[userId]</b></td>
         <td>GET</td>
         <td>None</td>
         <td>A JSON object holding data about a single user</td>
@@ -123,11 +166,18 @@
         </td>
       </tr>
       <tr>
+        <td>Allow existing users to Login</td>
+        <td>/login</td>
+        <td>POST</td>
+        <td>None (Params are used)</td>
+        <td></td>
+      </tr>
+      <tr>
         <td>
           Allow users to update their user info (username, password, email, date
           of birth)
         </td>
-        <td>/users/<b>[username]</b></td>
+        <td>/users/<b>[userId]</b></td>
         <td>PUT</td>
         <td>
           A JSON object holding data about the User's name to update, structured
@@ -146,7 +196,7 @@
           Allow users to add a monument to their list of favorites (showing only
           a text that a monument has been added)
         </td>
-        <td>/users/<b>[username]</b>/monuments/<b>[monumentName]</b></td>
+        <td>/users/<b>[userId]</b>/monuments/<b>[monumentId]</b></td>
         <td>POST</td>
         <td>
           None
@@ -161,7 +211,7 @@
           Allow users to remove a monument from their list of favorites (showing
           only a text that a monument has been removed)
         </td>
-        <td>/users/<b>[username]</b>/monuments/<b>[monumentName]</b></td>
+        <td>/users/<b>[userId]</b>/monuments/<b>[monumentId]</b></td>
         <td>DELETE</td>
         <td>
           None
@@ -176,7 +226,7 @@
           Allow existing users to deregister (showing only a text that a user
           email has been removed). (ie. Delete a User from the list of Users)
         </td>
-        <td>/users/<b>[username]</b></td>
+        <td>/users/<b>[userId]</b></td>
         <td>DELETE</td>
         <td>
           None
