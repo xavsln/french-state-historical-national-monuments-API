@@ -16,6 +16,7 @@ let monumentSchema = mongoose.Schema({
     default: "https://via.placeholder.com/250",
   },
   remarks: String,
+  shortDescription: { type: String, required: true },
 });
 
 let userSchema = mongoose.Schema({
