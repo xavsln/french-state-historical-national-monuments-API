@@ -1,6 +1,6 @@
 body {
-  /* background-color: lightgrey; */
-  font-family: arial, sans-serif;
+  background-color: Snow;
+  font-family: "Gill Sans", arial, sans-serif;
 }
 
 table {
@@ -17,4 +17,9 @@ th {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+.highlight-blue {
+  color: blue;
+  font-weight: bold;
 }
