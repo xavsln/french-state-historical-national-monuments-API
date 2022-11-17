@@ -38,3 +38,7 @@ https://historical-national-monuments.herokuapp.com/documentation.html
 <br>
 
 # 3. Example of Front-end App developed using this API
+
+<br>
+
+# NOTE: a branch exists for this API with user autentication (passport.js token authentication)
